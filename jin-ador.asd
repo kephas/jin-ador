@@ -3,7 +3,7 @@
   :version "0.1"
   :author "Pierre Thierry <pierre@nothos.net>"
   :licence "AGPL"
-  :depends-on ("scheme" "alexandria" "cl-who" "caveman2" "elephant")
+  :depends-on ("scheme" "alexandria" "cl-who" "caveman2" "elephant" "metabang-bind")
   :components ((:file "package")
 	       ;(:file "misc")
 	       (:file "shell")

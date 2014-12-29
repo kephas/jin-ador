@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>. |#
 
 (defpackage :nothos.net/2014.12.jin-ador
-  (:use :common-lisp :alexandria :scheme :who)
+  (:use :common-lisp :alexandria :scheme :who :metabang-bind)
   (:import-from :caveman2 #:defroute #:*request* #:*response*)
   (:import-from #:clack.response #:redirect)
   (:nicknames :jin-ador))

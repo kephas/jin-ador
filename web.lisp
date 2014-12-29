@@ -29,7 +29,7 @@
        (unless shell
 	 (setf shell (ele:make-btree))
 	 (ele:add-to-root "baad-default-shell" shell))
-       (setf *baad-default-shell* shell)))))
+       (setf *baad-default-shell* shell)))
 
 (defmacro jin-page (title &body body)
   `(with-html-output-to-string (out nil :indent t)
@@ -56,8 +56,7 @@
 	(:script :src "/static/js/sticky-tabs.js"))))))
 
 (defroute "/" ()
-  (redirect *response* (if (zerop (shell-count *baad-default-shell* "combineds"))
-			   "/units" "/charts")))
+  (jin-page "Home"))
 
 (defun clackup (port)
   (open-storage)
