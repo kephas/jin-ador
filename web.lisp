@@ -22,6 +22,8 @@
 
 (defvar *baad-default-shell*)
 
+(defvar *families* '("Stark" "Greyjoy" "Lannister" "Baratheon" "Tyrell" "Martel"))
+
 (defun open-storage ()
   (ele:open-store `(:clsql (:sqlite3 ,(merge-pathnames #p"timers.sqlite"
 						       (asdf:component-pathname (asdf:find-system "jin-ador"))))))
@@ -55,8 +57,19 @@
 	(:script :src "/static/js/local.js")
 	(:script :src "/static/js/sticky-tabs.js"))))))
 
-(defroute "/" ()
-  (jin-page "Home"))
+(defroute "/" (&key reset)
+  (jin-page "Home"
+    (:a :id "foobar" :href "#1" "Foobar")
+    (:hr)
+    (:div :id "target")))
+
+(defroute "/reset" (&key time)
+  (dolist (family *families*)
+    (setf (shell-object *baad-default-shell* family) time))
+  (redirect *response* "/"))
+
+(defroute "/test" ()
+  "<span>OK!</span>")
 
 (defun clackup (port)
   (open-storage)
