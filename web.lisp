@@ -58,6 +58,13 @@
 (defroute "/" ()
   (jin-page "Home"))
 
+(defroute "/timers" (&key _parsed)
+  (list
+   200
+   '(:content-type "application/json")
+   (let ((families (getf _parsed :families)))
+     (list (families-json *baad-default-shell* families)))))
+
 (defun clackup (port)
   (open-storage)
   (clack:clackup

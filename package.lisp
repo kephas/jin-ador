@@ -17,5 +17,5 @@
 (defpackage :nothos.net/2014.12.jin-ador
   (:use :common-lisp :alexandria :scheme :who :metabang-bind :local-time)
   (:import-from :caveman2 #:defroute #:*request* #:*response*)
-  (:import-from #:clack.response #:redirect)
+  (:import-from #:clack.response #:redirect #:headers)
   (:nicknames :jin-ador))
