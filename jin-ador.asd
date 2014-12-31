@@ -6,6 +6,7 @@
   :depends-on ("scheme" "alexandria" "cl-who" "caveman2" "elephant" "metabang-bind")
   :components ((:file "package")
 	       ;(:file "misc")
+	       (:file "timer")
 	       (:file "shell")
 	       (:file "bootstrap")
 	       (:file "web"))

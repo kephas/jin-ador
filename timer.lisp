@@ -14,8 +14,22 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. |#
 
-(defpackage :nothos.net/2014.12.jin-ador
-  (:use :common-lisp :alexandria :scheme :who :metabang-bind :local-time)
-  (:import-from :caveman2 #:defroute #:*request* #:*response*)
-  (:import-from #:clack.response #:redirect)
-  (:nicknames :jin-ador))
+(in-package :nothos.net/2014.12.jin-ador)
+
+(defclass timer ()
+  ((seconds-left :initarg :size :accessor timer-left)
+   (state :initarg :state :accessor timer-state)) ;nil for stopped
+  (:default-initargs :state nil))
+
+(defun timer-start (timer)
+  (setf (timer-state timer) (now)))
+
+(defun timer-stop (timer)
+  (let ((elapsed (- (timestamp-to-unix (now)) (timestamp-to-unix (timer-state timer)))))
+    (setf (timer-state timer) nil)
+    (decf (timer-left timer) elapsed)))
+
+(defun timer-toggle (timer)
+  (if (timer-state timer)
+      (timer-stop timer)
+      (timer-start timer)))
