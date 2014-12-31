@@ -34,13 +34,14 @@
       (timer-stop timer)
       (timer-start timer)))
 
-(defun timer-json (timer)
+(defun timer-alist (timer)
   (let ((state (timer-state timer)))
     (if state
-	(json:encode-json-to-string
-	 `((:state :started)
-	   (:last-value ,(timer-left timer))
-	   (:start-date ,(timestamp-to-unix state))))
-	(json:encode-json-to-string
-	 `((:state :stopped)
-	   (:last-value ,(timer-left timer)))))))
+	`((:state :started)
+	  (:last-value ,(timer-left timer))
+	  (:start-date ,(* 1000 (timestamp-to-unix state))))
+	`((:state :stopped)
+	  (:last-value ,(timer-left timer))))))
+
+(defmethod json:encode-json ((object timer) &optional stream)
+  (json:encode-json-alist (timer-alist object) stream))
