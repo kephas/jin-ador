@@ -21,20 +21,28 @@
    (state :initarg :state :accessor timer-state)) ;nil for stopped
   (:default-initargs :state nil))
 
-(defun timer-start (timer)
-  (setf (timer-state timer) (now)))
+(defgeneric timer-start (timer))
+(defgeneric timer-stop (timer))
 
-(defun timer-stop (timer)
-  (let ((elapsed (- (timestamp-to-unix (now)) (timestamp-to-unix (timer-state timer)))))
-    (setf (timer-state timer) nil)
-    (decf (timer-left timer) elapsed)))
+(defmethod timer-start ((timer (eql nil))))
+(defmethod timer-stop ((timer (eql nil))))
+
+(defmethod timer-start ((timer timer))
+  (unless (timer-state timer)
+    (setf (timer-state timer) (now))))
+
+(defmethod timer-stop ((timer timer))
+  (when (timer-state timer)
+    (let ((elapsed (- (timestamp-to-unix (now)) (timestamp-to-unix (timer-state timer)))))
+      (setf (timer-state timer) nil)
+      (decf (timer-left timer) elapsed))))
 
 (defun timer-toggle (timer)
   (if (timer-state timer)
       (timer-stop timer)
       (timer-start timer)))
 
-(defun timer-alist (timer)
+(defun %timer-alist (timer)
   (let ((state (timer-state timer)))
     (if state
 	`((:state :started)
@@ -44,4 +52,4 @@
 	  (:last-value ,(timer-left timer))))))
 
 (defmethod json:encode-json ((object timer) &optional stream)
-  (json:encode-json-alist (timer-alist object) stream))
+  (json:encode-json-alist (%timer-alist object) stream))
