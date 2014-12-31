@@ -33,3 +33,14 @@
   (if (timer-state timer)
       (timer-stop timer)
       (timer-start timer)))
+
+(defun timer-json (timer)
+  (let ((state (timer-state timer)))
+    (if state
+	(json:encode-json-to-string
+	 `((:state :started)
+	   (:last-value ,(timer-left timer))
+	   (:start-date ,(timestamp-to-unix state))))
+	(json:encode-json-to-string
+	 `((:state :stopped)
+	   (:last-value ,(timer-left timer)))))))
