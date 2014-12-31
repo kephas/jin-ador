@@ -16,7 +16,7 @@
 
 (in-package :nothos.net/2014.12.jin-ador)
 
-(defclass timer ()
+(ele:defpclass timer ()
   ((seconds-left :initarg :size :accessor timer-left)
    (state :initarg :state :accessor timer-state)) ;nil for stopped
   (:default-initargs :state nil))
