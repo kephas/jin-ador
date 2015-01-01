@@ -70,10 +70,13 @@
    (let ((families (getf _parsed :families)))
      (families-json *baad-default-shell* families))))
 
-(defroute ("/timers" :method :POST) (&key _parsed)
-  (let ((toggle (getf _parsed :toggle))
+(defroute ("/timers" :method :POST) (&key duration _parsed)
+  (let ((create (getf _parsed :create))
+	(toggle (getf _parsed :toggle))
 	(start (getf _parsed :start))
 	(stop (getf _parsed :stop)))
+    (when create
+      (create-timers *baad-default-shell* duration create))
     (dolist (family toggle) (timer-toggle (shell-object *baad-default-shell* family)))
     (dolist (family start) (timer-start (shell-object *baad-default-shell* family)))
     (dolist (family stop) (timer-stop (shell-object *baad-default-shell* family)))
