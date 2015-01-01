@@ -58,12 +58,26 @@
 (defroute "/" ()
   (jin-page "Home"))
 
-(defroute "/timers" (&key _parsed)
+(defun serve-json (json)
   (list
    200
-   '(:content-type "application/json")
+   '(:content-type "application/json"
+     :access-control-allow-origin "*")
+   (list json)))
+
+(defroute "/timers" (&key _parsed)
+  (serve-json
    (let ((families (getf _parsed :families)))
-     (list (families-json *baad-default-shell* families)))))
+     (families-json *baad-default-shell* families))))
+
+(defroute ("/timers" :method :POST) (&key _parsed)
+  (let ((toggle (getf _parsed :toggle))
+	(start (getf _parsed :start))
+	(stop (getf _parsed :stop)))
+    (dolist (family toggle) (timer-toggle (shell-object *baad-default-shell* family)))
+    (dolist (family start) (timer-start (shell-object *baad-default-shell* family)))
+    (dolist (family stop) (timer-stop (shell-object *baad-default-shell* family)))
+    (serve-json (families-json *baad-default-shell* (reduce #'union (list toggle start stop))))))
 
 (defun clackup (port)
   (open-storage)
