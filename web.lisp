@@ -56,7 +56,7 @@
 	(:script :src "/static/js/sticky-tabs.js"))))))
 
 (defroute "/" ()
-  (jin-page "Home"))
+  (redirect *response* "/index.html"))
 
 (defun serve-json (json)
   (list
@@ -86,6 +86,9 @@
   (open-storage)
   (clack:clackup
    (clack.builder:builder
+    (clack.middleware.static:<clack-middleware-static>
+     :path "/index.html"
+     :root (merge-pathnames #p"static/index.html" (asdf:system-source-directory "jin-ador")))
     (clack.middleware.static:<clack-middleware-static>
      :path "/static/"
      :root (merge-pathnames #p"static/" (asdf:system-source-directory "jin-ador")))
