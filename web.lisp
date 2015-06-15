@@ -33,6 +33,14 @@
 	 (ele:add-to-root "baad-default-shell" shell))
        (setf *baad-default-shell* shell)))
 
+(defvar *js-scripts* '("jquery" "bootstrap" "angular"))
+
+(defun js-scripts (stream)
+  (with-html-output (out stream)
+    (dolist (script *js-scripts*)
+      (let ((src (format nil "/static/js/~a.js" script)))
+	(htm (:script :src src))))))
+
 (defmacro jin-page (title &body body)
   `(with-html-output-to-string (out nil :indent t)
      (:html
@@ -52,10 +60,7 @@
        ((:div :class "container")
 	(:h1 (str ,title))
 	,@body
-	(:script :src "/static/js/jquery.js")
-	(:script :src "/static/js/bootstrap.js")
-	(:script :src "/static/js/local.js")
-	(:script :src "/static/js/sticky-tabs.js"))))))
+	(js-scripts out))))))
 
 (defroute "/" (&key reset)
   (jin-page "Home"
